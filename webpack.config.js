@@ -1,105 +1,85 @@
-const VueLoaderPlugin = require("vue-loader/lib/plugin"),
-  copyWebpackPlugin = require("copy-webpack-plugin"),
-  miniCssExtractPlugin = require("mini-css-extract-plugin"),
-  cleanPlugin = require("clean-webpack-plugin"),
-  htmlWebpackPlugin = require("html-webpack-plugin"),
-  devServer = require("webpack-dev-server"),
-  webpack = require("webpack");
+const webpack = require('webpack'),  
+  htmlPlugin = require('html-webpack-plugin'),
+  devServer = require('webpack-dev-server'),
+  miniCssExtractPlugin = require('mini-css-extract-plugin'),
+  copyWebpackPlugin = require('copy-webpack-plugin')
+  VueLoaderPlugin = require('vue-loader/lib/plugin')
+
+
 module.exports = {
-  mode: "development",
-  devtool: "eval-source-map",
+  mode: 'development',
+  devtool: 'eval-source-map',
   entry: {
-    index: "./src/js/index.js"
+    index: './src/index.js'
   },
   output: {
-    filename: "./js/[name]-[hash:8].js", //[chunkhash:8]生产打包时使用
-    path: __dirname + "/dist",
-    publicPath: "http://localhost:8888/" //服务器根地址
+    path: __dirname + '/dist',
+    filename: './js/[name]-[hash:8].js',
+    publicPath: '/'
   },
-  plugins: [
-    new cleanPlugin(
-      "dist/{js,css}/*.*", //匹配要删除的文件，多个时可为数组
-      {
-        root: __dirname
-      }
-    ),
-    new htmlWebpackPlugin({
-      template: "./src/index.html", //指定模板html
-      chunks: ["index"], //引入的文件
-      //excludeChunks:["demo"],//不引入的
-      inject: "body", //引入位置
-      filename: "index.html",
-      title: "首页"
+  plugins: [    
+    new htmlPlugin({
+      template: './src/index.html',//html 模板文件
+      // chunks : ['index'],//引入的js对应的chuank 
+      //excludeChunks: ['demo'],//排除对应的chuank
+      inject: 'body',//引入的位置
+      filename: 'index.html',//处理后导出的文件名
+      title: '首页'
     }),
     new webpack.HotModuleReplacementPlugin(),
     new miniCssExtractPlugin({
-      filename: "css/[name]-[hash:8].css"
+      filename: 'css/[name]-[hash:8].css'
     }),
-    new copyWebpackPlugin([
-      {
-        from: __dirname + "/src/assets",
-        to: "./assets/" //dist
-      }
-    ]),
+    // new copyWebpackPlugin([{
+    //   from: __dirname +'/src/assets',
+    //   to:'./assets/'//dist
+    // }])
     new VueLoaderPlugin()
   ],
   devServer: {
     contentBase: "./dist",
-    inline: true,
+    inline: true,//实时刷新
     overlay: {
-      errors: true
+      errors: true//浏览器显示错误
     },
     port: 8888,
-    hot: true //启用热更新，局部更新，不刷新全部网页，需要webpack.HotModeleReplacementPlugin
+    hot: true//启用热更新
   },
   module: {
     rules: [
-      /* {
-        //webpack4以上不用babel，已全面支持ES6
-        test: /\.js$/,
-        user: [
-          {
-            loader: "babel-loader",
-            option: {
-              presets: ["env"]//推荐使用.babelrc配置文件
-            }
-          }
-        ]
-      },*/
+      {
+        test: /\.js$/,        
+        loader: 'babel-loader',         
+      },
       {
         test: /\.vue$/,
-        loader: "vue-loader"
+        loader:'vue-loader'
       },
       {
         test: /\.css$/,
-        use: [miniCssExtractPlugin.loader, "css-loader", "postcss-loader"]
+        use: [miniCssExtractPlugin.loader, 'css-loader', 'postcss-loader']
       },
       {
         test: /\.scss$/,
-        use: [
-          miniCssExtractPlugin.loader, //分离css
-          "css-loader", //打包css到index.js
-          "sass-loader", //编译sass
-          "postcss-loader" //前缀
-        ]
+        use: [miniCssExtractPlugin.loader, 'css-loader', 'sass-loader', 'postcss-loader']
       },
       {
         test: /\.(png|jpg|gif|svg)$/,
         use: [
           {
-            loader: "url-loader",
+            loader: 'url-loader',
             options: {
-              limit: 8 * 1024, //小于8kb的图片转base64
-              name: "[name].[ext]", //转到dist目录后的文件名和后缀于src下相同
-              outputPath: "img/"
+              limit: 8 * 1024,// 转base64
+              name: '[name].[ext]',//ext 代表文件原本后缀
+              outputPath: 'img/'//导出的位置
             }
           }
         ]
+      },
+      {
+        test: /\.(htm|html)$/i,
+        loader: 'html-withimg-loader'
       }
-      // {
-      //   test: /\.(htm|html)$/i,
-      //   loader: "html-withimg-loader"
-      // }
     ]
   }
-};
+}
