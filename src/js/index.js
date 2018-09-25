@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from '../App.vue'
-/*eslint no-new:off */
+/* eslint no-new:off */
 new Vue({
   el: '#app',
   data: {
