@@ -1,14 +1,10 @@
-<!--<template functional>
-    <div>{{props.prop}}</div> 
-</template>-->
-
 <script>
 export default {
-  //   props: ["prop"]
   functional: true,
-  render(createElement, context) {
-    console.log(context);
-    return createElement("div", "comp");
+  props: ['prop1'],
+  render (h, context) {
+    console.log(context)
+    return h('div', 'comp')
   }
-};
+}
 </script>

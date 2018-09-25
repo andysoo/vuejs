@@ -1,16 +1,11 @@
 <template>
-    <div>
-        <Comp prop='prop1'></Comp>
-    </div>
+  <Comp prop1="prop" prop2="prop2" class="classa" style="color:red"></Comp>
 </template>
-
 <script>
-// import Comp from "./CompFunctional";
-import Comp from "./CompFunctional.jsx";
-// console.log(CompFunctional);
+import Comp from './CompFunctional'
 export default {
   components: {
     Comp
   }
-};
+}
 </script>

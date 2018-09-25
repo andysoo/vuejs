@@ -1,19 +1,21 @@
 export default {
-  name: "app",
-  data() {
+  name: 'App',
+  data () {
     return {
       msg: 123,
       isShow: true,
-      arr: [4, 5, 6]
+      arr: [1, 2, 3]
     }
   },
-  render() {
+  render () {
     return (
       <div>
-        <div v-show={this.isShow}>{this.msg}</div>
+        <div v-show={this.isShow} >{ this.msg }</div>
         <input type="text" v-model={this.msg} />
         {
-          this.arr.map(element => <div>{element}</div>)
+          this.arr.map(element =>
+            <span>{element}</span>
+          )
         }
       </div>
     )
