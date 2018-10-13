@@ -19,4 +19,4 @@ export default {
     next();
   }
 };
-</script> 
+</script>
