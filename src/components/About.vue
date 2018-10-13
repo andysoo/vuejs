@@ -10,15 +10,15 @@
 </template>
 <script>
 export default {
-  props: ["id"],
-  beforeCreate() {
-    console.log("beforeCreate");
+  props: ['id'],
+  beforeCreate () {
+    console.log('beforeCreate')
   },
-  beforeRouteEnter(to, from, next) {
-    console.log("beforeRouteEnter", to, from);
+  beforeRouteEnter (to, from, next) {
+    console.log('beforeRouteEnter', to, from)
     next(vm => {
-      console.log(vm.$el);
-    });
+      console.log(vm.$el)
+    })
   }
-};
+}
 </script>
