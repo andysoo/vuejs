@@ -16,10 +16,11 @@ module.exports = (env, argv) => {
       filename: './js/[name]-[hash:8].js',
       publicPath: '/'
     },
-    resolve:{
-      extensions:['*','.js','.vue','.jsx'],
-      alias:{
-        '@':path.resolve(__dirname, '../src/components')
+    resolve: {
+      extensions: ['*', '.js', '.vue', '.jsx'],
+      alias: {
+        '@': path.resolve(__dirname, '../src/components'),
+        'vue$': 'vue/dist/vue.common.js'
       }
     },
     plugins: [
@@ -43,8 +44,8 @@ module.exports = (env, argv) => {
           enforce: 'pre',
           test: /\.(js|vue|jsx)$/,
           loader: 'eslint-loader',
-          options:{
-            fix:true
+          options: {
+            fix: true
           },
           exclude: /node_modules/
         },

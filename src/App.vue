@@ -7,11 +7,12 @@
       <router-link to="/about">关于我们</router-link>
     </nav>
     <router-view></router-view>
+    <router-view name="header"></router-view>
   </div>
 </template>
+
 <style>
 nav a {
   margin: 0 10px;
 }
 </style>
-
