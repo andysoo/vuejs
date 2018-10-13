@@ -9,7 +9,15 @@
 </template>
 <script>
 export default {
-  props: ["userid", "name", "photoid", "sokey"]
+  props: ["userid", "name", "photoid", "sokey"],
+  beforeRouteUpdate(to, from, next) {
+    console.log("beforeRouteUpdate", to, from);
+    next();
+  },
+  beforeRouteEnter(to, from, next) {
+    console.log("beforeRouteEnter", to, from);
+    next();
+  }
 };
 </script>
 

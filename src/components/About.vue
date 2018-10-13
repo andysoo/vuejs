@@ -10,7 +10,16 @@
 </template>
 <script>
 export default {
-  props: ["id"]
+  props: ["id"],
+  beforeCreate() {
+    console.log("beforeCreate");
+  },
+  beforeRouteEnter(to, from, next) {
+    console.log("beforeRouteEnter", to, from);
+    next(vm => {
+      console.log(vm.$el);
+    });
+  }
 };
 </script>
 

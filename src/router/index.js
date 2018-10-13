@@ -16,6 +16,10 @@ const routes = [
   },
   {
     // name: 'About',
+    beforeEnter: (to, from, next) => {
+      console.log('beforEnter', to, from)
+      next()
+    },
     path: '/about',
     component: About,
     props: true,
