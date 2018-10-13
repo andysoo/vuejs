@@ -9,7 +9,6 @@
 </template>
 <script>
 export default {
-  props: ["userid", "name", "photoid", "sokey"]
-};
+  props: ['userid', 'name', 'photoid', 'sokey']
+}
 </script>
-
