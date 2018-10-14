@@ -1,100 +1,69 @@
-import Home from '@/Home'
-// import About from '@/About'
-// import User from '@/User'
 import Router from 'vue-router'
 import Vue from 'vue'
-const User = () => import(/* webpackChunkName: "group-app" */ '@/User')
-const About = () => import(/* webpackChunkName: "group-app" */ '@/About')
+import Main from '@/Main'
+import Footer from '@/Footer'
+import Cart from '@/Cart'
+import Category from '@/Category'
+import Home from '@/Home'
+import Mpointsmall from '@/Mpointsmall'
+import Phone from '@/Phone'
+import Tv from '@/Tv'
+import Me from '@/Me'
+
 Vue.use(Router)
 
 const routes = [
   {
-    name: 'Home',
     path: '/',
     components: {
-      default: Home,
-      header: { template: `<div>header</div>` },
-      footer: { template: `<div>footer</div>` }
-    }
-  },
-  {
-    // name: 'About',
-    beforeEnter: (to, from, next) => {
-      console.log('beforEnter', to, from)
-      next()
+      default: Main,
+      footer: Footer
     },
-    path: '/about',
-    component: About,
-    props: true,
     children: [
-      // 默认二级路由，name只能有一人在子路由上
       {
-        name: 'AboutIndex',
         path: '',
-        component: { template: `<div>about us index</div>` }
+        component: Home,
+        children: [
+          {
+            path: '',
+            meta: { index: 1 },
+            component: Phone
+          },
+          {
+            path: '/tv',
+            component: Tv
+          }
+        ]
       },
       {
-        name: 'Tel',
-        path: 'tel',
-        component: { template: `<div>tel:13300001111</div>` }
+        path: '/category',
+        name: '/Category',
+        meta: { index: 2 },
+        component: Category
       },
       {
-        name: 'Addr',
-        path: 'addr/:id',
-        props: true,
-        component: {
-          template: `<div>Addr{{id}}:地址省地址市</div>`,
-          props: ['id']
-        }
+        path: '/cart',
+        name: '/Cart',
+        meta: { index: 3 },
+        component: Cart
+      },
+      {
+        path: '/me',
+        name: '/Me',
+        meta: { index: 4 },
+        component: Me
       }
     ]
   },
   {
-    name: 'User',
-    path: '/user',
-    component: User,
-    meta: { requiresAuth: true },
-    // props: true,
-    // props: { userid: 123, name: 'zs' },
-    props: (route) => ({
-      userid: route.params.userid,
-      photoid: route.query.photoid,
-      sokey: route.query.sokey
-    }),
-    children: [
-      {
-        name: 'UserWho',
-        path: ':userid',
-        // meta: { requiresAuth: true },
-        props: true,
-        component: {
-          template: `<div>用户{{$route.params.userid}}</div>`,
-          props: ['userid']
-        }
-      }
-    ]
-  },
-  {
-    path: '/a',
-    // redirect: '/b',// 重定向
-    alias: ['/b', '/c', '/d/e/f'], // 别名
-    component: { template: `<div>aaaaa</div>` }
+    path: '/mpointsmall',
+    name: 'Mpointsmall',
+    component: Mpointsmall
   }
-  // {
-  //   name: 'User2',
-  //   path: '/user2/:userid',
-  //   component: User
-  // }
+
 ]
 
 export default new Router({
   mode: 'history',
   routes
-  // scrollBehavior(to, from, savedPosition) {
-  //   // return 期望滚动到哪个的位置
-  //   if (savedPosition) {
-  //     // return savedPosition
-  //   }
-  // }
-  // 与原生浏览器作用相同，可用于不支持的浏览器
 })

@@ -1,27 +1,41 @@
 <template>
-  <div>
-    <h1>App</h1>
-    <nav>
-      <router-link to="/">首页</router-link>
-      <router-link to="/user">会员中心</router-link>
-      <router-link to="/user/123">会员123</router-link>
-      <router-link to="/user/456">会员456</router-link>
-      <router-link to="/about">关于我们</router-link>
-    </nav>
-    <transition name="slider">
-      <router-view></router-view>
-    </transition>
-    <router-view name="header"></router-view>
+  <div class="container">
+    <router-view class="main"></router-view>
     <router-view name="footer"></router-view>
   </div>
 </template>
 
-<style>
-nav a {
-  margin: 0 10px;
+<style lang="scss">
+html,
+body {
+  overflow: hidden;
+}
+body {
+  margin: 0;
+}
+ul,
+li {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+a {
+  text-decoration: none;
+}
+.container {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  .main {
+    flex: 1 1 0%;
+  }
+  .nav {
+    flex: 0 0 50px;
+  }
 }
 .slider-enter-active,
 .slider-leave-active {
+  position: absolute;
   transition: all 0.5s;
 }
 .slider-enter {
@@ -31,5 +45,19 @@ nav a {
 .slider-leave-to {
   opacity: 1;
   transform: translate3d(300px, 0, 0);
+}
+
+.slider2-enter-active,
+.slider2-leave-active {
+  position: absolute;
+  transition: all 0.5s;
+}
+.slider2-enter {
+  opacity: 1;
+  transform: translate3d(300px, 0, 0);
+}
+.slider2-leave-to {
+  opacity: 0;
+  transform: translate3d(-300px, 0, 0);
 }
 </style>
