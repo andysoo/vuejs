@@ -1,8 +1,10 @@
 import Home from '@/Home'
-import About from '@/About'
-import User from '@/User'
+// import About from '@/About'
+// import User from '@/User'
 import Router from 'vue-router'
 import Vue from 'vue'
+const User = () => import(/* webpackChunkName: "group-app" */ '@/User')
+const About = () => import(/* webpackChunkName: "group-app" */ '@/About')
 Vue.use(Router)
 
 const routes = [
@@ -11,7 +13,8 @@ const routes = [
     path: '/',
     components: {
       default: Home,
-      header: { template: `<div>header</div>` }
+      header: { template: `<div>header</div>` },
+      footer: { template: `<div>footer</div>` },
     }
   },
   {
@@ -50,6 +53,7 @@ const routes = [
     name: 'User',
     path: '/user',
     component: User,
+    meta: { requiresAuth: true },
     // props: true,
     // props: { userid: 123, name: 'zs' },
     props: (route) => ({
@@ -61,6 +65,7 @@ const routes = [
       {
         name: 'UserWho',
         path: ':userid',
+        // meta: { requiresAuth: true },
         props: true,
         component: {
           template: `<div>用户{{$route.params.userid}}</div>`,
@@ -84,5 +89,12 @@ const routes = [
 
 export default new Router({
   mode: 'history',
-  routes
+  routes,
+  // scrollBehavior(to, from, savedPosition) {
+  //   // return 期望滚动到哪个的位置
+  //   if (savedPosition) {
+  //     // return savedPosition
+  //   }
+  // }
+  // 与原生浏览器作用相同，可用于不支持的浏览器
 })
