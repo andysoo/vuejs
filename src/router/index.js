@@ -14,7 +14,7 @@ const routes = [
     components: {
       default: Home,
       header: { template: `<div>header</div>` },
-      footer: { template: `<div>footer</div>` },
+      footer: { template: `<div>footer</div>` }
     }
   },
   {
@@ -89,7 +89,7 @@ const routes = [
 
 export default new Router({
   mode: 'history',
-  routes,
+  routes
   // scrollBehavior(to, from, savedPosition) {
   //   // return 期望滚动到哪个的位置
   //   if (savedPosition) {
