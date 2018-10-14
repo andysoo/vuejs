@@ -7,18 +7,18 @@
 </template>
 <script>
 export default {
-  data() {
+  data () {
     return {
-      slider: "slider"
-    };
-  },
-  beforeRouteUpdate(to, from, next) {
-    if (to.meta.index > from.meta.index) {
-      this.slider = "slider2";
-    } else {
-      this.slider = "slider";
+      slider: 'slider'
     }
-    next();
+  },
+  beforeRouteUpdate (to, from, next) {
+    if (to.meta.index > from.meta.index) {
+      this.slider = 'slider2'
+    } else {
+      this.slider = 'slider'
+    }
+    next()
   }
-};
+}
 </script>
