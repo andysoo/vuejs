@@ -1,63 +1,44 @@
 <template>
-  <div class="container">
-    <router-view class="main"></router-view>
-    <router-view name="footer"></router-view>
+  <div>
+    test
   </div>
 </template>
-
-<style lang="scss">
-html,
-body {
-  overflow: hidden;
-}
-body {
-  margin: 0;
-}
-ul,
-li {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-a {
-  text-decoration: none;
-}
-.container {
-  display: flex;
-  height: 100vh;
-  flex-direction: column;
-  .main {
-    flex: 1 1 0%;
+<script>
+/* eslint no-eval:off */
+// import axios from "axios";
+import jsonp from "jsonp";
+export default {
+  created() {
+    // axios
+    //   .get("http://music.henshui.com/api/musicList.js?!234")
+    //   .then(res => {
+    //     console.log(res.data);
+    //     this.musicList = eval(res.data); //不建议使用eval（）会报错
+    //   })
+    //   .catch(rej => {
+    //     console.log(rej);
+    //   });
+    // fetch("http://music.henshui.com/api/musicList.js?!234")
+    //   .then(res => res.text())
+    //   .then(res => {
+    //     console.log(res);
+    //   })
+    //   .catch(rej => {
+    //     console.log(rej);
+    //   });
+    jsonp(
+      "https://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_cp.fcg?tpl=3&page=detail&date=2018-10-17&topid=4&type=top&song_begin=0&song_num=30&g_tk=5381&jsonpCallback=MusicJsonCallbacktoplist&loginUin=0&hostUin=0&format=jsonp&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0",
+      { name: "MusicJsonCallbacktoplist", timeout: 1000 },
+      (err, data) => {
+        console.log(err);
+        console.log(data);
+      }
+    );
+  },
+  data() {
+    return {
+      musicList: []
+    };
   }
-  .nav {
-    flex: 0 0 50px;
-  }
-}
-.slider-enter-active,
-.slider-leave-active {
-  position: absolute;
-  transition: all 0.5s;
-}
-.slider-enter {
-  opacity: 0;
-  transform: translate3d(-300px, 0, 0);
-}
-.slider-leave-to {
-  opacity: 1;
-  transform: translate3d(300px, 0, 0);
-}
-
-.slider2-enter-active,
-.slider2-leave-active {
-  position: absolute;
-  transition: all 0.5s;
-}
-.slider2-enter {
-  opacity: 1;
-  transform: translate3d(300px, 0, 0);
-}
-.slider2-leave-to {
-  opacity: 0;
-  transform: translate3d(-300px, 0, 0);
-}
-</style>
+};
+</script>
