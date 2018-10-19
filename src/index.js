@@ -12,4 +12,3 @@ new Vue({
   // render:h=>h('div','test')
   render: h => h(App)
 })
-
