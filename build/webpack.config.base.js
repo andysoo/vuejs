@@ -10,7 +10,7 @@ const webpack = require('webpack'),
 
 module.exports = (env, argv) => {
   return {
-    entry: path.resolve(__dirname, '../src/index.js'),
+    entry: ['babel-polyfill', path.resolve(__dirname, '../src/index.js')],
     output: {
       path: path.resolve(__dirname, '../dist'),
       filename: './js/[name]-[hash:8].js',
@@ -52,15 +52,17 @@ module.exports = (env, argv) => {
         {
           test: /\.js$/,
           loader: 'babel-loader',
+          exclude: /(node_modules | bower_components)/
         },
         {
           test: /\.jsx$/,
-          loader: 'babel-loader',
+          loader: 'babel-loader'
         },
         {
           test: /\.vue$/,
           loader: 'vue-loader',
-          options: vueLoaderConfig(argv.mode === 'development')
+          options: vueLoaderConfig(argv.mode === 'development'),
+          exclude: /(node_modules | bower_components)/
         },
         {
           test: /\.(png|jpg|gif|svg)$/,

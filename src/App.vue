@@ -1,44 +1,100 @@
 <template>
   <div>
+    <Child></Child>
     test
+    <p>
+      state: {{ $store.state.msg }}
+    </p>
+    <p>
+      getters: {{ $store.getters.secUser[0] }}
+    </p>
+    <p>
+      count: {{ count }}
+    </p>
+    <p>
+      user: {{ $store.state.user }}
+    </p>
   </div>
 </template>
 <script>
-/* eslint no-eval:off */
-// import axios from "axios";
-import jsonp from "jsonp";
+import Child from '@/Child'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 export default {
-  created() {
-    // axios
-    //   .get("http://music.henshui.com/api/musicList.js?!234")
-    //   .then(res => {
-    //     console.log(res.data);
-    //     this.musicList = eval(res.data); //不建议使用eval（）会报错
-    //   })
-    //   .catch(rej => {
-    //     console.log(rej);
-    //   });
-    // fetch("http://music.henshui.com/api/musicList.js?!234")
-    //   .then(res => res.text())
-    //   .then(res => {
-    //     console.log(res);
-    //   })
-    //   .catch(rej => {
-    //     console.log(rej);
-    //   });
-    jsonp(
-      "https://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_cp.fcg?tpl=3&page=detail&date=2018-10-17&topid=4&type=top&song_begin=0&song_num=30&g_tk=5381&jsonpCallback=MusicJsonCallbacktoplist&loginUin=0&hostUin=0&format=jsonp&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0",
-      { name: "MusicJsonCallbacktoplist", timeout: 1000 },
-      (err, data) => {
-        console.log(err);
-        console.log(data);
-      }
-    );
+  mounted () {
+    // console.log(this.$store);
+    // this.$store.state.msg = 456; 不能直接改
+    // setInterval(() => this.$store.commit("addCount"), 1000);
+    // setInterval(() => this.addCount(), 1000);
+    // setInterval(() => this.addCountComp(), 1000);
+    // setInterval(() => this.addCountStep({ step: 2 }), 1000);
+    // setInterval(
+    //   () =>
+    //     this.$store.commit({
+    //       type: "addCountStep",
+    //       step: 2,
+    //       add: 1
+    //     }),
+    //   1000
+    // );
+    // this.$store.commit({
+    //   type: "addAge",
+    //   age: 21
+    // });
+    // this.addAge({ age: 18 });
+    // setInterval(() => {
+    //   this.$store.dispatch("addCountAction", { step: 2, add: 1 });
+    // }, 1000);
+    // setInterval(() => {
+    //   this.addCountAction({ step: 2, add: 1 });
+    // }, 1000);
   },
-  data() {
+  created () {
+    this.getMusicListActionC()
+    this.$store.subscribe((mutation, state) => {
+      console.log(mutation)
+      console.log(state)
+    })
+  },
+  components: {
+    Child
+  },
+  data () {
     return {
-      musicList: []
-    };
+      message: 123
+    }
+  },
+  // computed: mapState(["msg", "arr"]) 不能写自己的属性了
+  computed: {
+    // ...mapState(["msg", "arr"]),
+    ...mapState({
+      msg2: 'msg',
+      arr2: 'arr',
+      count: 'count',
+      musicList: 'musicList',
+      // addMessage: state => state.msg + state.arr[2]
+      addMessage (state) {
+        // 箭头函数没有this
+        // console.log(this);
+        return this.message + state.msg
+      }
+    }),
+    ...mapGetters(['secUser', 'userWho']),
+    thirdUser () {
+      return this.userWho(3)
+    },
+    user3 () {
+      return this.$store.getters.userWho(3)
+    },
+    message2 () {
+      return this.message + 2
+    }
+  },
+  methods: {
+    ...mapMutations(['addCount', 'addCountStep', 'addAge']),
+    // ...mapMutations({
+    //   addCountComp: "addCount"
+    // })
+    ...mapActions(['addCountAction', 'getMusicListActionC'])
   }
-};
+}
 </script>
