@@ -1,31 +1,14 @@
 <template>
-  <div>
-    Cell
-    <input type="text" v-model="message">
-  </div>
+  <div></div>
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapGetters, mapMutations } = createNamespacedHelpers('moduleA/moduleB')
+
+const { mapState } = createNamespacedHelpers('moduleA/moduleB')
 export default {
   computed: {
-    ...mapState(['count', 'msg']),
-    ...mapGetters(['bCount']),
-    message: {
-      get () {
-        return this.msg
-      },
-      set (value) {
-        // this.$store.commit('moduleA/moduleB/changeMsg', value)
-        this.changeMsg(value)
-      }
-    }
-  },
-  methods: {
-    ...mapMutations(['changeCount', 'changeMsg'])
-  },
-  mounted () {
-    // this.changeCount(1111)
+    ...mapState(['msg'])
   }
+  // mounted()
 }
 </script>

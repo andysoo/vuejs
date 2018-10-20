@@ -1,100 +1,99 @@
 <template>
+<section class="todoapp">
   <div>
-    <Child></Child>
-    test
-    <p>
-      state: {{ $store.state.msg }}
-    </p>
-    <p>
-      getters: {{ $store.getters.secUser[0] }}
-    </p>
-    <p>
-      count: {{ count }}
-    </p>
-    <p>
-      user: {{ $store.state.user }}
-    </p>
+    <header class="header">
+      <h1>todos</h1>
+      <input class="new-todo" placeholder="What needs to be done?" value="" @keyup.enter="addTodo" ref="ipt">
+    </header>
+    <section class="main" v-show="isHaveTodo">
+      <input id="toggle-all" class="toggle-all" type="checkbox" v-model="checkAll">
+      <label for="toggle-all"></label>
+      <ul class="todo-list">
+        <item v-for="(todo,index) in todosView" :key="index" :todo="todo">
+        </item>
+      </ul>
+    </section>
+    <tabs
+      v-show="isHaveTodo"
+    >
+    </tabs>
   </div>
+</section>
 </template>
+
 <script>
-import Child from '@/Child'
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+import './style/comm.scss'
+import Item from './components/Item'
+import Tabs from './components/Tabs'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 export default {
-  mounted () {
-    // console.log(this.$store);
-    // this.$store.state.msg = 456; 不能直接改
-    // setInterval(() => this.$store.commit("addCount"), 1000);
-    // setInterval(() => this.addCount(), 1000);
-    // setInterval(() => this.addCountComp(), 1000);
-    // setInterval(() => this.addCountStep({ step: 2 }), 1000);
-    // setInterval(
-    //   () =>
-    //     this.$store.commit({
-    //       type: "addCountStep",
-    //       step: 2,
-    //       add: 1
-    //     }),
-    //   1000
-    // );
-    // this.$store.commit({
-    //   type: "addAge",
-    //   age: 21
-    // });
-    // this.addAge({ age: 18 });
-    // setInterval(() => {
-    //   this.$store.dispatch("addCountAction", { step: 2, add: 1 });
-    // }, 1000);
-    // setInterval(() => {
-    //   this.addCountAction({ step: 2, add: 1 });
-    // }, 1000);
-  },
-  created () {
-    this.getMusicListActionC()
-    this.$store.subscribe((mutation, state) => {
-      console.log(mutation)
-      console.log(state)
-    })
-  },
   components: {
-    Child
+    Tabs,
+    Item
   },
-  data () {
-    return {
-      message: 123
-    }
-  },
-  // computed: mapState(["msg", "arr"]) 不能写自己的属性了
+
   computed: {
-    // ...mapState(["msg", "arr"]),
-    ...mapState({
-      msg2: 'msg',
-      arr2: 'arr',
-      count: 'count',
-      musicList: 'musicList',
-      // addMessage: state => state.msg + state.arr[2]
-      addMessage (state) {
-        // 箭头函数没有this
-        // console.log(this);
-        return this.message + state.msg
-      }
+    ...mapGetters(['isHaveTodo', 'todosView']),
+    ...mapGetters({
+      checkAllComp: 'checkAll'
     }),
-    ...mapGetters(['secUser', 'userWho']),
-    thirdUser () {
-      return this.userWho(3)
-    },
-    user3 () {
-      return this.$store.getters.userWho(3)
-    },
-    message2 () {
-      return this.message + 2
+    checkAll: {
+      get () {
+        return this.checkAllComp
+      },
+      set (val) {
+        // this.todos.forEach(todo => (todo.isCompleted = val))
+        this.selectAll(val)
+      }
     }
   },
   methods: {
-    ...mapMutations(['addCount', 'addCountStep', 'addAge']),
-    // ...mapMutations({
-    //   addCountComp: "addCount"
-    // })
-    ...mapActions(['addCountAction', 'getMusicListActionC'])
+    ...mapMutations({
+      addTodoStore: 'addTodo',
+      selectAll: 'selectAll'
+    }),
+    ...mapActions(['saveData', 'loadData']),
+    addTodo (e) {
+      // this.todos.unshift({
+      //   // content:e.target.value
+      //   content: this.$refs.ipt.value,
+      //   isCompleted: false
+      // })
+      // this.$store.commit('addCount', {
+      //   content: this.$refs.ipt.value,
+      //   isCompleted: false
+      // })
+      this.addTodoStore({
+        content: this.$refs.ipt.value,
+        isCompleted: false
+      })
+      this.$refs.ipt.value = ''
+    }
+    // deleteTodo (todo) {
+    //   // this.todos.splice(this.todos.findIndex(item=> todo===item),1)
+    //   this.todos = this.todos.filter(item => item !== todo)
+    // },
+    // toggleFilter (filter) {
+    //   this.filter = filter
+    // },
+    // clearCompleted () {
+    //   this.todos = this.todos.filter(item => item.isCompleted !== true)
+    // }
+  },
+  updated () {
+    this.saveData()
+    // localStorage.setItem('filter', this.filter)
+    // localStorage.setItem('todos', JSON.stringify(this.todos))
+  },
+  created () {
+    // if (localStorage.getItem('todos')) {
+    //   this.todos = JSON.parse(localStorage.getItem('todos'))
+    // }
+    // if (localStorage.getItem('filter')) {
+    //   this.filter = localStorage.getItem('filter')
+    // }
+    this.loadData()
   }
+
 }
 </script>

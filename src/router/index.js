@@ -1,17 +1,23 @@
-import Router from 'vue-router'
-import Vue from 'vue'
+// import Home from '@/Home'
+// import About from '@/About'
 import Main from '@/Main'
 import Footer from '@/Footer'
 import Cart from '@/Cart'
+import Me from '@/Me'
 import Category from '@/Category'
 import Home from '@/Home'
-import Mpointsmall from '@/Mpointsmall'
 import Phone from '@/Phone'
 import Tv from '@/Tv'
-import Me from '@/Me'
-
+import Mpointsmall from '@/Mpointsmall'
+import Router from 'vue-router'
+import Vue from 'vue'
 Vue.use(Router)
 
+/*
+  route :
+  routes :
+  router :
+*/
 const routes = [
   {
     path: '/',
@@ -22,47 +28,57 @@ const routes = [
     children: [
       {
         path: '',
+        // name: 'Home',
         component: Home,
+        meta: {
+          index: 1
+        },
         children: [
           {
             path: '',
-            meta: { index: 1 },
-            component: Phone
+            component: Phone,
+            meta: {
+              index: 1
+            }
           },
           {
-            path: '/tv',
+            path: 'tv',
             component: Tv
           }
         ]
       },
       {
-        path: '/category',
-        name: '/Category',
-        meta: { index: 2 },
-        component: Category
+        path: 'category',
+        name: 'Category',
+        component: Category,
+        meta: {
+          index: 2
+        }
       },
       {
-        path: '/cart',
-        name: '/Cart',
-        meta: { index: 3 },
-        component: Cart
+        path: 'cart',
+        name: 'Cart',
+        component: Cart,
+        meta: {
+          index: 3
+        }
       },
       {
-        path: '/me',
-        name: '/Me',
-        meta: { index: 4 },
-        component: Me
+        path: 'me',
+        name: 'Me',
+        component: Me,
+        meta: {
+          index: 4
+        }
       }
     ]
   },
   {
     path: '/mpointsmall',
-    name: 'Mpointsmall',
-    component: Mpointsmall
+    component: Mpointsmall,
+    name: 'Mpointsmall'
   }
-
 ]
-
 export default new Router({
   mode: 'history',
   routes

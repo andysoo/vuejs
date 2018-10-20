@@ -1,16 +1,22 @@
 import moduleB from './moduleB'
 export default {
   namespaced: true,
-  state: { count: 1 },
+  state: {
+    count: 1,
+    msg: 'hi'
+  },
   getters: {
-    aCount: state => state.count * 2
+    aCount (state) {
+      return state.count * 3
+    }
   },
-  modules: {
-    moduleB
-  },
+
   actions: {
-    action2 ({ commit }) {
+    aAction2 ({ commit }) {
       console.log('test')
     }
+  },
+  modules: {
+    moduleB: moduleB
   }
 }

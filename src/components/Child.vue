@@ -3,43 +3,54 @@
     Child:
     {{ $store.state.msg }}
     <br>
-    {{ $store.state.moduleA.count}}
-    <br>
-    {{ aCount2 }}
+    {{ this.$store.state.moduleA.msg }}
     <Cell></Cell>
+    <p>
+      {{ aCount }}
+    </p>
   </div>
+
 </template>
 <script>
 import Cell from './Cell'
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapMutations } from 'vuex'
 export default {
   computed: {
-    ...mapState(['msg', 'moduleA']),
+    ...mapState(['users', 'moduleA']),
     ...mapState({
-      childCount: state => state.moduleA.count
+      cMsg: state => state.moduleA.msg
     }),
+    ...mapState('moduleA', ['msg']),
     ...mapState('moduleA', {
-      childCount2: state => state.count,
-      childCount3: 'count'
+      cMsg2: state => state.msg,
+      cMsg3: 'msg'
     }),
-    // ...mapGetters(['moduleA/aCount']) 不推荐这种写法
-    // ...mapGetters('moduleA', ['aCount'])
+    ...mapGetters(['moduleA/aCount']),
+    ...mapGetters('moduleA', ['aCount']),
     ...mapGetters('moduleA', {
       aCount2: 'aCount'
-    })
+    }),
+
+    secUser () {
+      return this.users[1]
+    }
+  },
+  methods: {
+    ...mapMutations('moduleA/moduleB', ['changeCount'])
   },
   mounted () {
-    // console.log(this['moduleA/aCount'])
-    console.log(this.aCount2)
-    this.$store.registerModule(['moduleA', 'myModule'], {
-      state: {
-        count: 111
-      }
-    })
-
-    setTimeout(() => {
-      this.$store.unregisterModule(['moduleA', 'myModule'])
-    }, 5000)
+    console.log(this['moduleA/aCount'])
+    this.changeCount(789)
+    // this.$store.registerModule(['moduleA', 'myModule'], {
+    //   state: {
+    //     count: 111
+    //   }
+    // })
+    // this.$store.unregisterModule('myModule')
+    // setTimeout(() => {
+    //   this.$store.unregisterModule('myModule')
+    //   console.log(this.$store)
+    // }, 5000)
   },
   components: {
     Cell

@@ -1,99 +1,104 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
-import axios from 'axios'
-import * as Types from './mutation-types'
-import moduleA from './modules/moduleA'
+// import * as Types from './mutations-type'
+
 Vue.use(Vuex)
+
 const store = new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
   state: {
-    msg: 123,
-    arr: [1, 2, 3],
-    users: [
-      { id: 1, name: '张三' },
-      { id: 2, name: '李四' },
-      { id: 3, name: '王五' }
-    ],
-    count: 0,
-    user: {
-      id: 1,
-      name: '赵六',
-      sex: 'male'
-    },
-    musicList: ''
+    todos: [],
+    filter: 'All'
   },
   getters: {
-    secUser: state => state.users.filter(user => user.id >= 2),
-    userWho: state => id => state.users.filter(user => user.id === id)
+    todosView (state) {
+      if (state.filter === 'All') {
+        return state.todos
+      } else if (state.filter === 'Active') {
+        return state.todos.filter(v => !v.isCompleted)
+      } else {
+        return state.todos.filter(v => v.isCompleted)
+      }
+    },
+    leftItemsCount (state) {
+      return state.todos.reduce((t, v) => (v.isCompleted ? t : t + 1), 0)
+    },
+    isHaveCompleted (state) {
+      return state.todos.some(item => item.isCompleted)
+    },
+    isHaveTodo (state) {
+      return state.todos.length
+    },
+    checkAll (state) {
+      return state.todos.every(item => item.isCompleted)
+    }
   },
   mutations: {
-    // addCount: (state) => {
-    //   state.count++
-    // },
-    // addCountStep: (state, payload) => {
-    //   state.count += payload.step + payload.add
-    // },
-    // addAge: (state, payload) => {
-    //   state.user = { ...state.user, age: payload.age }
-    // },
-    [Types.ADD_COUNT_TYPE]: (state) => {
-      state.count++
+    addTodo (state, todo) {
+      state.todos.unshift(todo)
     },
-    [Types.ADD_COUNTSTEP_TYPE]: (state, payload) => {
-      state.count += payload.step + payload.add
+    changeCompleted (state, todo) {
+      let index = state.todos.findIndex(item => item === todo)
+      state.todos[index].isCompleted = !state.todos[index].isCompleted
+      // state.todos[index].isCompleted =!
+      console.log(state)
+      // state.todos = state.todos.map(item => {
+      //   if (item === todo) {
+      //     return Object.assign({}, item, { isCompleted: !item.isCompleted })
+      //   } else {
+      //     return item
+      //   }
+      // })
     },
-    [Types.ADD_AGE_TYPE]: (state, payload) => {
-      state.user = { ...state.user, age: payload.age }
+    changeTodo (state, payload) {
+      console.log('changeTodo mutaion', payload)
+      state.todos = state.todos.map(item => {
+        if (item === payload.todo) {
+          return Object.assign({}, item, { content: payload.value })
+        } else {
+          return item
+        }
+      })
     },
-    getMusicList: (state, payload) => {
-      state.musicList = payload
-      // console.log(state.musicList)
+    deleteTodo (state, todo) {
+      // state.todos.splice(state.todos.findIndex(item=> todo===item),1)
+      state.todos = state.todos.filter(item => item !== todo)
+    },
+    toggleFilter (state, filter) {
+      state.filter = filter
+    },
+    clearCompleted (state) {
+      state.todos = state.todos.filter(item => item.isCompleted !== true)
+    },
+    selectAll (state, checkAll) {
+      state.todos.forEach(todo => (todo.isCompleted = checkAll))
+    },
+    init (state, payload) {
+      if (payload.todos) {
+        state.todos = payload.todos
+        state.filter = payload.filter
+      }
     }
   },
   actions: {
-    addCountAction ({ commit }, payload) { commit('addCountStep', payload) },
-    getMusicListAction ({ commit }) {
-      return axios
-        .get('http://music.henshui.com/api/musicList.js?!234')
-        .then(res => {
-          commit('getMusicList', res.data)
-          console.log('getMusicListAction promise')
-        })
+    saveData ({ state }, payload) {
+      localStorage.setItem('filter', state.filter)
+      localStorage.setItem('todos', JSON.stringify(state.todos))
     },
-    getMusicListActionB ({ dispatch }) {
-      return dispatch('getMusicListAction')
-        .then(() => {
-          console.log('dispatch promise')
-        })
-    },
-    // 同getMusicListActionB
-    async getMusicListActionC ({ dispatch }) {
-      await dispatch('getMusicListActionB')
-        .then(() => {
-          console.log('async promise')
-        })
+    loadData ({ commit }) {
+      let todos, filter
+      if (localStorage.getItem('todos')) {
+        todos = JSON.parse(localStorage.getItem('todos'))
+      }
+      if (localStorage.getItem('filter')) {
+        filter = localStorage.getItem('filter')
+      }
+      commit('init', {
+        todos: todos || [],
+        filter: filter || 'All'
+      })
     }
-  },
-  modules: {
-    moduleA
   }
 })
-
-if (module.hot) {
-  // 使 action 和 mutation 成为可热重载模块
-  module.hot.accept(['./modules/moduleA'], () => {
-    // 获取更新后的模块
-    // 因为 babel 6 的模块编译格式问题，这里需要加上 `.default`
-    // const newMutations = require('./mutations').default
-    const newModuleA = require('./modules/moduleA').default
-    // 加载新模块
-    store.hotUpdate({
-      modules: {
-        moduleA: newModuleA
-      }
-    })
-  })
-}
-// 如果要热加载index.js内的数据，需要把数据当做模块加载进来
 
 export default store
