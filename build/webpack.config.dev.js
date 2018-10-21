@@ -38,7 +38,7 @@ const config = {
             loader: 'css-loader',
             options: {
               // // 开启 CSS Modules
-              // modules: false,
+              // modules: true,
               // // 自定义生成的类名
               // localIdentName: '[path]-[name]-[hash:base64:5]',
               // camelCase: true,
